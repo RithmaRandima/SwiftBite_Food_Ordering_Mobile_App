@@ -1,4 +1,4 @@
-import { CreateUserParams, SignInParams } from "@/type";
+import { CreateUserParams, GetMenuParams, SignInParams } from "@/type";
 import {
   Account,
   Avatars,
@@ -6,6 +6,7 @@ import {
   Databases,
   ID,
   Query,
+  Storage,
 } from "react-native-appwrite";
 
 export const appWriteConfig = {
@@ -13,9 +14,13 @@ export const appWriteConfig = {
   platform: "com.SwiftBite.FoodOrdering",
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
   databaseId: "6a0b2f51001b551786b2",
-
+  bucketId: "6a129fe5000f6d627e0f",
   // USE REAL COLLECTION ID HERE
   userCollectionId: "user",
+  categoriesCollectionId: "categories",
+  menuCollectionId: "menu",
+  customizationsCollectionId: "customization",
+  menuCustomizationsCollectionId: "menu_customizations",
 };
 
 export const client = new Client();
@@ -27,6 +32,7 @@ client
 
 export const account = new Account(client);
 export const databases = new Databases(client);
+export const storage = new Storage(client);
 const avatars = new Avatars(client);
 
 export const createUser = async ({
@@ -94,5 +100,38 @@ export const getCurrentUser = async () => {
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);
+  }
+};
+
+export const getMenu = async ({ category, query }: GetMenuParams) => {
+  try {
+    const queries: string[] = [];
+
+    if (category) queries.push(Query.equal("categories", category));
+    if (query) queries.push(Query.search("name", query));
+
+    const menus = await databases.listDocuments(
+      appWriteConfig.databaseId,
+      appWriteConfig.menuCollectionId,
+      queries,
+    );
+    return menus;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const getCategories = async () => {
+  try {
+    const categories = await databases.listDocuments(
+      appWriteConfig.databaseId,
+      appWriteConfig.categoriesCollectionId,
+    );
+
+    return categories;
+  } catch (error) {
+    console.log(error);
+
+    throw new Error("Failed to fetch categories");
   }
 };
