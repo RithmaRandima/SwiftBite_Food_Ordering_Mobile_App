@@ -135,3 +135,33 @@ export const getCategories = async () => {
     throw new Error("Failed to fetch categories");
   }
 };
+
+export const getCustomization = async () => {
+  try {
+    const customization = await databases.listDocuments(
+      appWriteConfig.databaseId,
+      appWriteConfig.customizationsCollectionId,
+    );
+
+    return customization;
+  } catch (error) {
+    console.log(error);
+
+    throw new Error("Failed to fetch categories");
+  }
+};
+
+export const getCategoryById = async (categoryId: string) => {
+  try {
+    const category = await databases.getDocument(
+      appWriteConfig.databaseId,
+      appWriteConfig.categoriesCollectionId, // your categories collection
+      categoryId,
+    );
+
+    return category;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch category");
+  }
+};

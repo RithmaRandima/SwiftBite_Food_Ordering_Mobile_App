@@ -1,5 +1,6 @@
 import { appWriteConfig } from "@/lib/appwrite";
 import { MenuItem } from "@/type";
+import { router } from "expo-router";
 import React from "react";
 import { Image, Platform, Text, TouchableOpacity } from "react-native";
 
@@ -13,6 +14,12 @@ const MenuCard = ({ item }: { item: MenuItem }) => {
         Platform.OS === "android"
           ? { elevation: 10, shadowColor: "#878787" }
           : {}
+      }
+      onPress={() =>
+        router.push({
+          pathname: "/product",
+          params: { id: item.$id },
+        })
       }
     >
       <Image
