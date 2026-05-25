@@ -103,7 +103,7 @@ export default function Index() {
                       isEven ? "pl-10" : "pr-10",
                     )}
                   >
-                    <Text className="h1-bold text-white leading-tight">
+                    <Text className="h1-bold font-extrabold text-white leading-tight">
                       {item.title}
                     </Text>
 
